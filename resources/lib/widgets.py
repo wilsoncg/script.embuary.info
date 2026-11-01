@@ -213,6 +213,7 @@ def _nextaired(day):
                                       'duration': i.get('runtime', 0),
                                       'mediatype': 'episode'}
                                       )
+            li_item.setDateTime(airing_date + 'T00:00:00Z')
             li_item.setProperty('AirDay', i['weekday'])
             li_item.setProperty('AirTime', airing_time)
             li_item.setProperty('IsPlayable', 'false')
@@ -485,3 +486,4 @@ def _previouspage(page):
 
 def _sortmethods():
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)

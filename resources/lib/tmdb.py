@@ -358,6 +358,7 @@ def tmdb_handle_movie(item,local_items=None,full_info=False,mediatype='movie'):
                                 'studio': tmdb_join_items(item.get('production_companies', '')),
                                 'mediatype': mediatype}
                                  )
+    list_item.setDateTime(premiered + 'T00:00:00Z')
     list_item.setArt({'icon': 'DefaultVideo.png', 'thumb': icon, 'poster': icon, 'fanart': backdrop})
     list_item.setProperty('role', item.get('character', ''))
     list_item.setProperty('budget', format_currency(item.get('budget')))
@@ -381,6 +382,15 @@ def tmdb_handle_movie(item,local_items=None,full_info=False,mediatype='movie'):
             list_item.setProperty('collection_poster', IMAGEPATH + collection['poster_path'] if collection['poster_path'] is not None else '')
             list_item.setProperty('collection_fanart', IMAGEPATH + collection['backdrop_path'] if collection['backdrop_path'] is not None else '')
 
+
+    xbmc.log(
+        'Embuary item debug: '
+        f"label={list_item.getLabel()!r}, "
+        f"premiered={list_item.getVideoInfoTag().getPremieredAsW3C()!r}, "
+        f"region_release={list_item.getProperty('region_release')!r}, "
+        f"DateTime={list_item.getDateTime()!r}",
+        xbmc.LOGINFO
+    )
     return list_item, is_local
 
 
@@ -422,6 +432,7 @@ def tmdb_handle_tvshow(item,local_items=None,full_info=False,mediatype='tvshow')
                                 'studio': tmdb_join_items(item.get('networks', '')),
                                 'mediatype': mediatype}
                                 )
+    list_item.setDateTime(premiered + 'T00:00:00Z')                               
     list_item.setArt({'icon': 'DefaultVideo.png', 'thumb': icon, 'poster': icon, 'fanart': backdrop})
     list_item.setProperty('TotalEpisodes', str(local_info['episodes']))
     list_item.setProperty('WatchedEpisodes', str(local_info['watchedepisodes']))
@@ -470,10 +481,11 @@ def tmdb_handle_season(item,tvshow_details,full_info=False):
     for episode in item.get('episodes', ''):
         episodes_count += 1
 
+    premiered = item.get('air_date', '')
     list_item = xbmcgui.ListItem(label=tvshow_label)
     list_item.setInfo('video', {'title': item['name'],
                                 'tvshowtitle': tvshow_label,
-                                'premiered': item.get('air_date', ''),
+                                'premiered': premiered,
                                 'episode': episodes_count,
                                 'season': season_nr,
                                 'plot': item.get('overview', ''),
@@ -483,6 +495,7 @@ def tmdb_handle_season(item,tvshow_details,full_info=False):
                                 'mpaa': tmdb_get_cert(tvshow_details),
                                 'mediatype': 'season'}
                                 )
+    list_item.setDateTime(premiered + 'T00:00:00Z')
     list_item.setArt({'icon': 'DefaultVideo.png', 'thumb': icon, 'poster': icon, 'fanart': backdrop})
     list_item.setProperty('TotalEpisodes', str(episodes_count))
     list_item.setProperty('id', str(tvshow_details['id']))
