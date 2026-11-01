@@ -382,15 +382,6 @@ def tmdb_handle_movie(item,local_items=None,full_info=False,mediatype='movie'):
             list_item.setProperty('collection_poster', IMAGEPATH + collection['poster_path'] if collection['poster_path'] is not None else '')
             list_item.setProperty('collection_fanart', IMAGEPATH + collection['backdrop_path'] if collection['backdrop_path'] is not None else '')
 
-
-    xbmc.log(
-        'Embuary item debug: '
-        f"label={list_item.getLabel()!r}, "
-        f"premiered={list_item.getVideoInfoTag().getPremieredAsW3C()!r}, "
-        f"region_release={list_item.getProperty('region_release')!r}, "
-        f"DateTime={list_item.getDateTime()!r}",
-        xbmc.LOGINFO
-    )
     return list_item, is_local
 
 
